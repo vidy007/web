@@ -25,31 +25,37 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  padding: 1rem;
+  overflow: hidden;
   font-size: clamp(2.5rem, 10vw, 9rem);
 }
 
 .hero__avatar {
   position: relative;
-  z-index: 1;
-  flex-shrink: 0;
   width: 1.08em;
   height: 1.08em;
+  animation: avatar-move 10s linear both;
+}
+
+.hero__video {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
   object-fit: cover;
   animation: avatar-pop 0.4s 0.22s cubic-bezier(0.55, 0.2, 0.15, 1) both;
 }
 
 .hero__title {
-  position: relative;
-  flex-shrink: 0;
-  min-width: 0;
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
   font-size: 1em;
   font-weight: normal;
   line-height: 1.2;
   white-space: nowrap;
-  width: 0;
-  animation: title-width 10s linear both;
 }
 
 .hero__hello {
@@ -76,7 +82,7 @@ body {
 
 .hero__test {
   position: absolute;
-  top: 0;
+  top: -0.05em;
   left: 0.13em;
   font-family: "Abril Fatface", serif;
   font-size: 0.98em;
@@ -92,17 +98,17 @@ body {
   }
 }
 
-@keyframes title-width {
+@keyframes avatar-move {
   0%, 6.5% {
-    width: 0;
+    transform: none;
     animation-timing-function: cubic-bezier(1, 0.1, 0.15, 1.1);
   }
   16%, 26.4% {
-    width: 3.88em;
+    transform: translateX(-1.94em);
     animation-timing-function: cubic-bezier(0.5, 0.8, 0.15, 1.25);
   }
   31.5%, 100% {
-    width: 5.63em;
+    transform: translateX(-2.815em);
   }
 }
 
@@ -132,10 +138,10 @@ body {
 
 @keyframes test-rise {
   from {
-    top: 0.19em;
+    top: 0.14em;
   }
   to {
-    top: 0;
+    top: -0.05em;
   }
 }
 

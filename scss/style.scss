@@ -18,6 +18,7 @@ $gap:         0.13em;
 $hello-width: 3.75em;  // «Hello», Gravitas One
 $test-width:  5.5em;   // «This is a test», Abril Fatface
 $test-size:   0.98em;  // в видео эта фраза на 2% мельче, чем «Hello»
+$test-nudge: -0.05em;  // и сидит чуть выше: у Abril буквы в строке ниже, чем у Gravitas
 
 // Размер точки, из которой вырастает аватарка (1 = полный размер)
 $dot-scale: 0.05;
@@ -44,7 +45,7 @@ $ease-out-rise: cubic-bezier(0.11, 0, 0.5, 0);    // «Hello» уходит вв
 $ease-in-rise:  cubic-bezier(0.5, 1, 0.89, 1);    // «This is a test» поднимается с торможением (ease-out)
 
 // Таймлайн: «когда начать» и «сколько длится»
-// (сдвиг группы влево — в @keyframes title-width ниже)
+// (путь аватарки влево — в @keyframes avatar-move ниже)
 $pop-start:  0.22s;  // аватарка вырастает из точки
 $pop-time:   0.4s;
 $text-start: 1.12s;  // «Hello» выезжает из-под аватарки, и одновременно уезжает шторка
@@ -95,39 +96,43 @@ body {
 // =============================================================
 
 .hero {
-  // Ставит аватарку и текст в ряд и держит всю группу по центру экрана.
-  // Когда заголовок становится шире, группа сама сдвигается влево.
+  // Ставит аватарку ровно в центр экрана
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  padding: 1rem;
+  overflow: hidden; // текст, спрятанный за шторкой, не должен давать прокрутку
   font-size: $title-size;
 
+  // Родитель: двигаем только его, заголовок внутри едет следом
   &__avatar {
     position: relative;
-    z-index: 1; // аватарка лежит поверх текста — «Hello» выезжает из-под неё
-    flex-shrink: 0;
     width: $avatar-size;
     height: $avatar-size;
+    animation: avatar-move 10s linear both;
+  }
+
+  &__video {
+    position: relative;
+    z-index: 1; // видео лежит поверх текста — «Hello» выезжает из-под него
+    display: block;
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
     object-fit: cover;
     animation: avatar-pop $pop-time $pop-start $ease-pop both;
   }
 
+  // Ребёнок: всегда прибит справа к аватарке и выровнен по её середине
   &__title {
-    position: relative; // «This is a test» встаёт поверх «Hello»
-    flex-shrink: 0;
-    min-width: 0;       // иначе flex не даст сжать заголовок до нуля
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
     font-size: 1em;
     font-weight: normal;
     line-height: 1.2;
     white-space: nowrap; // фраза всегда в одну строку
-
-    // Ширина заголовка двигает группу: 0 → «Hello» → «This is a test».
-    // Текст при этом может вылезать за края — его прячет шторка у «Hello».
-    width: 0;
-    animation: title-width 10s linear both;
   }
 
   &__hello {
@@ -161,7 +166,7 @@ body {
 
   &__test {
     position: absolute;
-    top: 0;
+    top: $test-nudge;
     left: $gap;
     font-family: "Abril Fatface", serif;
     font-size: $test-size;
@@ -181,19 +186,21 @@ body {
   to   { transform: scale(1); }
 }
 
-// Ширина заголовка за весь ролик. Длина анимации 10s, поэтому 1 секунда = 10%.
+// Путь аватарки за весь ролик. Длина анимации 10s, поэтому 1 секунда = 10%.
 // animation-timing-function внутри кадра задаёт кривую до следующего кадра.
-@keyframes title-width {
-  0%, 6.5% {     // 0–0.65s: только аватарка, по центру
-    width: 0;
+// Чтобы аватарка вместе с текстом стояла по центру экрана,
+// она уезжает влево на половину ширины текста (с отступом).
+@keyframes avatar-move {
+  0%, 6.5% {     // 0–0.65s: аватарка одна, по центру
+    transform: none;
     animation-timing-function: $ease-slide;
   }
-  16%, 26.4% {   // 0.65–1.6s: группа едет влево, держим до 2.64s
-    width: $gap + $hello-width;
+  16%, 26.4% {   // 0.65–1.6s: едет влево под «Hello», стоит до 2.64s
+    transform: translateX(($gap + $hello-width) * -0.5);
     animation-timing-function: $ease-swap;
   }
-  31.5%, 100% {  // 2.64–3.15s: расширяемся под «This is a test»
-    width: $gap + $test-width;
+  31.5%, 100% {  // 2.64–3.15s: едет дальше под «This is a test»
+    transform: translateX(($gap + $test-width) * -0.5);
   }
 }
 
@@ -214,8 +221,8 @@ body {
 }
 
 @keyframes test-rise {
-  from { top: $in-rise; }
-  to   { top: 0; }
+  from { top: $test-nudge + $in-rise; }
+  to   { top: $test-nudge; }
 }
 
 @keyframes fade-out {
