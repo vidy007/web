@@ -3,7 +3,6 @@
 // =============================================================
 // После коммита на GitHub CSS пересоберётся сам (см. README).
 
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
 // Цвета (сняты с кадров видео)
 $color-bg:   #f7f2eb;
 $color-text: #45405f;
@@ -74,6 +73,13 @@ $in-time:    0.1s;
 @font-face {
   font-family: "Abril Fatface";
   src: url("../fonts/AbrilFatface-Regular.woff2") format("woff2");
+  font-display: block;
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  src: url("../fonts/IBMPlexMono-Bold.woff2") format("woff2");
+  font-weight: 700; // это файл жирного начертания — у Plex Mono оно самое жирное
   font-display: block;
 }
 
