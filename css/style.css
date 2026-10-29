@@ -54,12 +54,13 @@ body {
 
 .hero__hello {
   position: relative;
+  top: 0;
   display: inline-block;
   vertical-align: top;
   overflow: hidden;
   margin-left: 0.13em;
   font-family: "Gravitas One", serif;
-  animation: hello-slide 0.38s 1.12s cubic-bezier(0.3, 1, 1, 1) both, fade-out 0.04s 2.68s linear both;
+  animation: hello-slide 0.38s 1.12s cubic-bezier(0.3, 1, 1, 1) both, hello-rise 0.12s 2.6s cubic-bezier(0.11, 0, 0.5, 0) both, fade-out 0.04s 2.68s linear both;
 }
 
 .hero__hello::after {
@@ -79,7 +80,7 @@ body {
   left: 0.13em;
   font-family: "Abril Fatface", serif;
   font-size: 0.98em;
-  animation: fade-in 0.1s 2.72s linear both;
+  animation: test-rise 0.1s 2.72s cubic-bezier(0.5, 1, 0.89, 1) both, fade-in 0.1s 2.72s linear both;
 }
 
 @keyframes avatar-pop {
@@ -120,6 +121,21 @@ body {
   }
   to {
     left: 100%;
+  }
+}
+
+@keyframes hello-rise {
+  to {
+    top: -0.15em;
+  }
+}
+
+@keyframes test-rise {
+  from {
+    top: 0.19em;
+  }
+  to {
+    top: 0;
   }
 }
 

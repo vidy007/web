@@ -28,6 +28,11 @@ $reveal-fade: 0.9em;
 // Насколько «Hello» спрятано под аватаркой перед выездом
 $slide-distance: 0.62em;
 
+// Смена фраз снизу вверх: на сколько «Hello» уходит вверх
+// и с какой высоты поднимается «This is a test»
+$out-rise: 0.15em;
+$in-rise:  0.19em;
+
 // Кривые скорости (easing). Подобраны по кадрам видео.
 // Удобно крутить на cubic-bezier.com — вставь четыре числа и увидишь график.
 $ease-pop:   cubic-bezier(0.55, 0.2, 0.15, 1);    // аватарка: плавный разгон, долгое торможение
@@ -35,6 +40,8 @@ $ease-slide: cubic-bezier(1, 0.1, 0.15, 1.1);     // группа едет вл�
 $ease-text:  cubic-bezier(0.3, 1, 1, 1);         // «Hello» выезжает из-под аватарки: резко, с долгим торможением
 $ease-wipe:  cubic-bezier(0.2, 0.8, 1, 1);        // шторка «Hello»: быстро открывается, мягко дотягивает
 $ease-swap:  cubic-bezier(0.5, 0.8, 0.15, 1.25);  // смена фраз: перелёт на 8% и возврат
+$ease-out-rise: cubic-bezier(0.11, 0, 0.5, 0);    // «Hello» уходит вверх с разгоном (ease-in)
+$ease-in-rise:  cubic-bezier(0.5, 1, 0.89, 1);    // «This is a test» поднимается с торможением (ease-out)
 
 // Таймлайн: «когда начать» и «сколько длится»
 // (сдвиг группы влево — в @keyframes title-width ниже)
@@ -43,9 +50,11 @@ $pop-time:   0.4s;
 $text-start: 1.12s;  // «Hello» выезжает из-под аватарки, и одновременно уезжает шторка
 $slide-time: 0.38s;
 $wipe-time:  0.63s;  // последние ~0.2s за текст уходит только градиент
-$out-start:  2.68s;  // «Hello» гаснет…
+$rise-start: 2.6s;   // «Hello» начинает уходить вверх…
+$rise-time:  0.12s;
+$out-start:  2.68s;  // …и в последние два кадра гаснет
 $out-time:   0.04s;
-$in-start:   2.72s;  // …и сразу ровно (linear) проявляется «This is a test»
+$in-start:   2.72s;  // «This is a test» поднимается снизу и ровно (linear) проявляется
 $in-time:    0.1s;
 
 
@@ -123,6 +132,7 @@ body {
 
   &__hello {
     position: relative;  // шторка (::after) позиционируется внутри слова
+    top: 0;              // нужно для плавного hello-rise: от «auto» браузер не анимирует
     display: inline-block;
     vertical-align: top;
     overflow: hidden;    // всё, что шторка вылезет за слово, обрезается
@@ -130,8 +140,9 @@ body {
     font-family: "Gravitas One", serif;
 
     animation:
-      hello-slide $slide-time $text-start $ease-text both,
-      fade-out    $out-time   $out-start  linear     both;
+      hello-slide $slide-time $text-start $ease-text     both,
+      hello-rise  $rise-time  $rise-start $ease-out-rise both,
+      fade-out    $out-time   $out-start  linear         both;
 
     // Шторка: прямоугольник цвета фона, слева у него градиент
     // от прозрачного к фону. Правый край прибит к концу слова,
@@ -154,7 +165,9 @@ body {
     left: $gap;
     font-family: "Abril Fatface", serif;
     font-size: $test-size;
-    animation: fade-in $in-time $in-start linear both;
+    animation:
+      test-rise $in-time $in-start $ease-in-rise both,
+      fade-in   $in-time $in-start linear        both;
   }
 }
 
@@ -193,6 +206,16 @@ body {
 @keyframes hello-wipe {
   from { left: -$reveal-fade; }
   to   { left: 100%; }
+}
+
+// Смена фраз снизу вверх: «Hello» уходит вверх, «This is a test» приходит снизу
+@keyframes hello-rise {
+  to { top: -$out-rise; }
+}
+
+@keyframes test-rise {
+  from { top: $in-rise; }
+  to   { top: 0; }
 }
 
 @keyframes fade-out {
