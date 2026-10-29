@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>This is a test</title>
+  <!-- Браузер читает только CSS, поэтому подключён скомпилированный файл.
+       Правки вносятся в scss/style.scss, см. README.md -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <main class="hero">
+    <!-- Аватарка: обычное видео по кругу, без звука.
+         muted обязателен — иначе браузер не запустит autoplay -->
+    <video class="hero__avatar" src="media/avatar.mp4"
+           autoplay muted loop playsinline aria-hidden="true"></video>
+
+    <h1 class="hero__title">
+      <!-- Если меняешь текст — поправь $hello-width / $test-width в scss -->
+      <span class="hero__hello">Hello</span>
+      <span class="hero__test">This is a test</span>
+    </h1>
+  </main>
+
+</body>
+</html>

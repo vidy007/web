@@ -1,0 +1,214 @@
+// =============================================================
+//  Настройки — всё, что обычно хочется поменять, собрано здесь
+// =============================================================
+
+// Цвета (сняты с кадров видео)
+$color-bg:   #f7f2eb;
+$color-text: #45405f;
+
+// Размер заголовка: не меньше 2.5rem, не больше 9rem, между ними — 10% ширины окна.
+// Аватарка, отступ и ширины слов заданы в em, поэтому растут вместе с текстом.
+$title-size:  clamp(2.5rem, 10vw, 9rem);
+$avatar-size: 1.08em;
+$gap:         0.13em;
+
+// Ширины фраз в своих шрифтах. Если меняешь текст в index.html —
+// поменяй и ширину: в инспекторе браузера ширина элемента в px,
+// делённая на размер шрифта в px, и есть число в em.
+$hello-width: 3.75em;  // «Hello», Gravitas One
+$test-width:  5.5em;   // «This is a test», Abril Fatface
+$test-size:   0.98em;  // в видео эта фраза на 2% мельче, чем «Hello»
+
+// Размер точки, из которой вырастает аватарка (1 = полный размер)
+$dot-scale: 0.05;
+
+// Ширина градиента у шторки, которая открывает «Hello»
+$reveal-fade: 0.9em;
+
+// Насколько «Hello» спрятано под аватаркой перед выездом
+$slide-distance: 0.62em;
+
+// Кривые скорости (easing). Подобраны по кадрам видео.
+// Удобно крутить на cubic-bezier.com — вставь четыре числа и увидишь график.
+$ease-pop:   cubic-bezier(0.55, 0.2, 0.15, 1);    // аватарка: плавный разгон, долгое торможение
+$ease-slide: cubic-bezier(1, 0.1, 0.15, 1.1);     // группа едет влево: медленно-резко-плавно, чуть перелетает
+$ease-text:  cubic-bezier(0.3, 1, 1, 1);         // «Hello» выезжает из-под аватарки: резко, с долгим торможением
+$ease-wipe:  cubic-bezier(0.2, 0.8, 1, 1);        // шторка «Hello»: быстро открывается, мягко дотягивает
+$ease-swap:  cubic-bezier(0.5, 0.8, 0.15, 1.25);  // смена фраз: перелёт на 8% и возврат
+
+// Таймлайн: «когда начать» и «сколько длится»
+// (сдвиг группы влево — в @keyframes title-width ниже)
+$pop-start:  0.22s;  // аватарка вырастает из точки
+$pop-time:   0.4s;
+$text-start: 1.12s;  // «Hello» выезжает из-под аватарки, и одновременно уезжает шторка
+$slide-time: 0.38s;
+$wipe-time:  0.63s;  // последние ~0.2s за текст уходит только градиент
+$out-start:  2.68s;  // «Hello» гаснет…
+$out-time:   0.04s;
+$in-start:   2.72s;  // …и сразу ровно (linear) проявляется «This is a test»
+$in-time:    0.1s;
+
+
+// =============================================================
+//  Шрифты — лежат локально в /fonts, никаких внешних сервисов
+// =============================================================
+
+@font-face {
+  font-family: "Gravitas One";
+  src: url("../fonts/GravitasOne.woff2") format("woff2");
+  font-display: block; // не показывать запасной шрифт, пока грузится нужный
+}
+
+@font-face {
+  font-family: "Abril Fatface";
+  src: url("../fonts/AbrilFatface-Regular.woff2") format("woff2");
+  font-display: block;
+}
+
+
+// =============================================================
+//  Страница
+// =============================================================
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  background: $color-bg;
+  color: $color-text;
+}
+
+
+// =============================================================
+//  Блок с аватаркой и заголовком
+// =============================================================
+
+.hero {
+  // Ставит аватарку и текст в ряд и держит всю группу по центру экрана.
+  // Когда заголовок становится шире, группа сама сдвигается влево.
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 1rem;
+  font-size: $title-size;
+
+  &__avatar {
+    position: relative;
+    z-index: 1; // аватарка лежит поверх текста — «Hello» выезжает из-под неё
+    flex-shrink: 0;
+    width: $avatar-size;
+    height: $avatar-size;
+    border-radius: 50%;
+    object-fit: cover;
+    animation: avatar-pop $pop-time $pop-start $ease-pop both;
+  }
+
+  &__title {
+    position: relative; // «This is a test» встаёт поверх «Hello»
+    flex-shrink: 0;
+    min-width: 0;       // иначе flex не даст сжать заголовок до нуля
+    font-size: 1em;
+    font-weight: normal;
+    line-height: 1.2;
+    white-space: nowrap; // фраза всегда в одну строку
+
+    // Ширина заголовка двигает группу: 0 → «Hello» → «This is a test».
+    // Текст при этом может вылезать за края — его прячет шторка у «Hello».
+    width: 0;
+    animation: title-width 10s linear both;
+  }
+
+  &__hello {
+    position: relative;  // шторка (::after) позиционируется внутри слова
+    display: inline-block;
+    vertical-align: top;
+    overflow: hidden;    // всё, что шторка вылезет за слово, обрезается
+    margin-left: $gap;
+    font-family: "Gravitas One", serif;
+
+    animation:
+      hello-slide $slide-time $text-start $ease-text both,
+      fade-out    $out-time   $out-start  linear     both;
+
+    // Шторка: прямоугольник цвета фона, слева у него градиент
+    // от прозрачного к фону. Правый край прибит к концу слова,
+    // левый уезжает вправо — и открывает текст.
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: -$reveal-fade; // в начале градиент стоит перед словом, текст закрыт целиком
+      right: 0;
+      background: linear-gradient(to right, rgba($color-bg, 0), $color-bg $reveal-fade);
+      animation: hello-wipe $wipe-time $text-start $ease-wipe both;
+    }
+  }
+
+  &__test {
+    position: absolute;
+    top: 0;
+    left: $gap;
+    font-family: "Abril Fatface", serif;
+    font-size: $test-size;
+    animation: fade-in $in-time $in-start linear both;
+  }
+}
+
+
+// =============================================================
+//  Анимации
+// =============================================================
+
+@keyframes avatar-pop {
+  from { transform: scale($dot-scale); }
+  to   { transform: scale(1); }
+}
+
+// Ширина заголовка за весь ролик. Длина анимации 10s, поэтому 1 секунда = 10%.
+// animation-timing-function внутри кадра задаёт кривую до следующего кадра.
+@keyframes title-width {
+  0%, 6.5% {     // 0–0.65s: только аватарка, по центру
+    width: 0;
+    animation-timing-function: $ease-slide;
+  }
+  16%, 26.4% {   // 0.65–1.6s: группа едет влево, держим до 2.64s
+    width: $gap + $hello-width;
+    animation-timing-function: $ease-swap;
+  }
+  31.5%, 100% {  // 2.64–3.15s: расширяемся под «This is a test»
+    width: $gap + $test-width;
+  }
+}
+
+@keyframes hello-slide {
+  from { transform: translateX(-$slide-distance); }
+  to   { transform: none; }
+}
+
+// Левый край шторки доезжает до конца слова — и шторки больше нет
+@keyframes hello-wipe {
+  from { left: -$reveal-fade; }
+  to   { left: 100%; }
+}
+
+@keyframes fade-out {
+  to { opacity: 0; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+
+// Если в системе включено «уменьшить движение» — сразу показываем финальный кадр
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}

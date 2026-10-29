@@ -1,0 +1,146 @@
+@font-face {
+  font-family: "Gravitas One";
+  src: url("../fonts/GravitasOne.woff2") format("woff2");
+  font-display: block;
+}
+
+@font-face {
+  font-family: "Abril Fatface";
+  src: url("../fonts/AbrilFatface-Regular.woff2") format("woff2");
+  font-display: block;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  background: #f7f2eb;
+  color: #45405f;
+}
+
+.hero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 1rem;
+  font-size: clamp(2.5rem, 10vw, 9rem);
+}
+
+.hero__avatar {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  width: 1.08em;
+  height: 1.08em;
+  border-radius: 50%;
+  object-fit: cover;
+  animation: avatar-pop 0.4s 0.22s cubic-bezier(0.55, 0.2, 0.15, 1) both;
+}
+
+.hero__title {
+  position: relative;
+  flex-shrink: 0;
+  min-width: 0;
+  font-size: 1em;
+  font-weight: normal;
+  line-height: 1.2;
+  white-space: nowrap;
+  width: 0;
+  animation: title-width 10s linear both;
+}
+
+.hero__hello {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  overflow: hidden;
+  margin-left: 0.13em;
+  font-family: "Gravitas One", serif;
+  animation: hello-slide 0.38s 1.12s cubic-bezier(0.3, 1, 1, 1) both, fade-out 0.04s 2.68s linear both;
+}
+
+.hero__hello::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -0.9em;
+  right: 0;
+  background: linear-gradient(to right, rgba(247, 242, 235, 0), #f7f2eb 0.9em);
+  animation: hello-wipe 0.63s 1.12s cubic-bezier(0.2, 0.8, 1, 1) both;
+}
+
+.hero__test {
+  position: absolute;
+  top: 0;
+  left: 0.13em;
+  font-family: "Abril Fatface", serif;
+  font-size: 0.98em;
+  animation: fade-in 0.1s 2.72s linear both;
+}
+
+@keyframes avatar-pop {
+  from {
+    transform: scale(0.05);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes title-width {
+  0%, 6.5% {
+    width: 0;
+    animation-timing-function: cubic-bezier(1, 0.1, 0.15, 1.1);
+  }
+  16%, 26.4% {
+    width: 3.88em;
+    animation-timing-function: cubic-bezier(0.5, 0.8, 0.15, 1.25);
+  }
+  31.5%, 100% {
+    width: 5.63em;
+  }
+}
+
+@keyframes hello-slide {
+  from {
+    transform: translateX(-0.62em);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes hello-wipe {
+  from {
+    left: -0.9em;
+  }
+  to {
+    left: 100%;
+  }
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}
