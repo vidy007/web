@@ -1,0 +1,33 @@
+# Автосборка CSS: после каждого коммита, где поменялся scss/,
+# GitHub компилирует scss/style.scss в css/style.css и коммитит результат.
+# Этот коммит уже публикует сайт на GitHub Pages как обычно.
+name: Сборка CSS
+
+on:
+  push:
+    branches: [main]
+    paths: ["scss/**"]
+  workflow_dispatch: # кнопка «Run workflow» на вкладке Actions — собрать вручную
+
+permissions:
+  contents: write # чтобы можно было закоммитить собранный CSS
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Установить компилятор SCSS (тот же sassc, что и на ноуте)
+        run: sudo apt-get update -q && sudo apt-get install -y -q sassc
+
+      - name: Собрать CSS
+        run: sassc --style expanded scss/style.scss css/style.css
+
+      - name: Закоммитить CSS, если он изменился
+        run: |
+          git diff --quiet css/style.css && exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Пересобран CSS из SCSS" css/style.css
+          git push

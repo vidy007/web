@@ -11,20 +11,33 @@ scss/style.scss     стили — правки вносить сюда
 css/style.css       скомпилированный CSS, его читает браузер (руками не править)
 fonts/              Gravitas One и Abril Fatface (woff2) + их лицензии OFL
 media/avatar.mp4    аватарка (видео без звука, 400×400)
+CNAME               домен vaiedy.su для GitHub Pages (не удалять)
+.github/workflows/  автосборка CSS на GitHub
 ```
+
+Сайт: https://vaiedy.su — GitHub Pages публикует ветку `main` сам,
+примерно через минуту после коммита.
 
 ## Как править
 
-1. Открыть `scss/style.scss`. Цвета, размеры и тайминги анимации — в самом верху,
-   в блоке «Настройки».
-2. Пересобрать CSS:
+Цвета, размеры и тайминги анимации — в самом верху `scss/style.scss`,
+в блоке «Настройки».
 
-   ```sh
-   sassc --style expanded scss/style.scss css/style.css
-   ```
+**С телефона / на github.com.** Открыть файл → карандаш → «Commit changes».
+Если менялся `scss/`, GitHub сам соберёт `css/style.css` и закоммитит его
+(вкладка Actions → «Сборка CSS»), после этого сайт обновится. Всё вместе —
+около 1–2 минут.
 
-   (или `sass scss/style.scss css/style.css`, если стоит Dart Sass)
-3. Открыть `index.html` в браузере.
+**На ноуте.** Сначала забрать изменения с GitHub, потом править:
+
+```sh
+git pull
+sassc --style expanded scss/style.scss css/style.css   # посмотреть локально
+git add -A && git commit -m "что поменял" && git push
+```
+
+Открыть `index.html` в браузере — локальный предпросмотр.
+Собранный CSS можно и не коммитить: GitHub пересоберёт его сам.
 
 Текст фраз меняется прямо в `index.html`. Если меняешь текст, обнови
 и `$hello-width` / `$test-width` в настройках scss: от них зависит, куда
