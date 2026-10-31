@@ -1,3 +1,6 @@
+video::-webkit-media-controls-overlay-play-button {
+  display: none; }
+
 @font-face {
   font-family: "Gravitas One";
   src: url("../fonts/GravitasOne.woff2") format("woff2");
