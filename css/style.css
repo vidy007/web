@@ -1,31 +1,40 @@
 @font-face {
   font-family: "Gravitas One";
   src: url("../fonts/GravitasOne.woff2") format("woff2");
-  font-display: block;
-}
+  font-display: block; }
 
 @font-face {
   font-family: "Abril Fatface";
   src: url("../fonts/AbrilFatface-Regular.woff2") format("woff2");
-  font-display: block;
-}
+  font-display: block; }
 
 @font-face {
-  font-family: "IBM Plex Mono";
-  src: url("../fonts/IBMPlexMono-Bold.woff2") format("woff2");
-  font-weight: 100;
-  font-display: block;
-}
+  font-family: "IBM Plex Mono Thin";
+  src: url("../fonts/IBMPlexMono-Thin.woff2") format("woff2");
+  font-display: block; }
+
+@font-face {
+  font-family: "Golos Text Medium";
+  src: url("../fonts/GolosText-Medium.woff2") format("woff2");
+  font-display: block; }
+
+@font-face {
+  font-family: "Golos Text Regular";
+  src: url("../fonts/GolosText-Regular.woff2") format("woff2");
+  font-display: block; }
+
+@font-face {
+  font-family: "Lora Regular";
+  src: url("../fonts/lora-regular-webfont.woff2") format("woff2");
+  font-display: block; }
 
 * {
   box-sizing: border-box;
-  margin: 0;
-}
+  margin: 0; }
 
 body {
   background: #f7f2eb;
-  color: #45405f;
-}
+  color: #45405f; }
 
 .hero {
   display: flex;
@@ -33,147 +42,189 @@ body {
   align-items: center;
   min-height: 100vh;
   overflow: hidden;
-  font-size: clamp(2.5rem, 10vw, 9rem);
-}
+  font-size: clamp(2.5rem, 10vw, 9rem); }
+  .hero__avatar {
+    position: relative;
+    width: 1.08em;
+    height: 1.08em;
+    animation: avatar-move 10s linear both; }
+  .hero__video {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    animation: avatar-pop 0.4s 0.22s cubic-bezier(0.55, 0.2, 0.15, 1) both; }
+  .hero__title {
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1em;
+    font-weight: normal;
+    line-height: 1.2;
+    white-space: nowrap; }
+  .hero__hello {
+    position: relative;
+    top: 0;
+    display: inline-block;
+    vertical-align: top;
+    overflow: hidden;
+    margin-left: 0.13em;
+    font-family: "Gravitas One", serif;
+    animation: hello-slide 0.38s 1.12s cubic-bezier(0.3, 1, 1, 1) both, hello-rise 0.12s 2.6s cubic-bezier(0.11, 0, 0.5, 0) both, fade-out 0.04s 2.68s linear both; }
+    .hero__hello::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: -0.9em;
+      right: 0;
+      background: linear-gradient(to right, rgba(247, 242, 235, 0), #f7f2eb 0.9em);
+      animation: hello-wipe 0.63s 1.12s cubic-bezier(0.2, 0.8, 1, 1) both; }
+  .hero__text {
+    position: absolute;
+    top: -0.05em;
+    left: 0.13em;
+    font-family: "Abril Fatface", serif;
+    font-size: 0.98em;
+    animation: test-rise 0.1s 2.72s cubic-bezier(0.5, 1, 0.89, 1) both, fade-in 0.1s 2.72s linear both; }
+  .hero .nickname {
+    display: none; }
+  .hero__text:after {
+    content: "[vaiedy]";
+    animation: fx-decoder 0.3s 2.72s ease both;
+    font-family: "IBM Plex Mono Thin", monospace; }
+  .hero__subtitle {
+    font-size: 0.15em;
+    width: 50.49em;
+    animation: fade-in 0.1s 3.8s linear both;
+    text-align: center;
+    font-family: "Golos Text Medium", sans-serif;
+    margin-top: 0.5em; }
 
-.hero__avatar {
-  position: relative;
-  width: 1.08em;
-  height: 1.08em;
-  animation: avatar-move 10s linear both;
-}
+.links {
+  display: flex;
+  justify-content: center;
+  animation: fade-in 0.1s 4s linear both; }
+  .links button {
+    background-color: #fffaf3;
+    color: inherit;
+    font-family: "Golos Text Medium", sans-serif;
+    text-decoration: none !important;
+    padding: 0.8em;
+    margin: 0.6em;
+    border: 1px solid #cecacd;
+    border-radius: 2em;
+    transition: 0.2s;
+    transition-timing-function: cubic-bezier(0.55, 0.2, 0.15, 1); }
+    .links button svg {
+      width: 20px;
+      height: 20px;
+      margin: 0 5px 0 0;
+      vertical-align: middle; }
+  .links button:hover {
+    border: 1px solid #cecacd00;
+    background-color: #464261;
+    color: #fffaf3;
+    border-radius: 0.8em; }
+    .links button:hover svg g path {
+      fill: #fffaf3; }
+  .links .tgch {
+    margin-left: -0.2em;
+    border-radius: 0.8em 2em 2em 0.8em; }
+  .links .tgch:hover, .links .telegram:hover {
+    border-radius: 0.8em; }
+  .links .telegram {
+    margin-left: 0;
+    border-radius: 2em 0.8em 0.8em 2em; }
 
-.hero__video {
-  position: relative;
-  z-index: 1;
-  display: block;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
-  animation: avatar-pop 0.4s 0.22s cubic-bezier(0.55, 0.2, 0.15, 1) both;
-}
+.projects {
+  font-family: "Lora Regular", serif;
+  text-align: center;
+  animation: fade-in 0.1s 4s linear both;
+  min-height: 100vh; }
+  .projects h3 {
+    padding-top: 45vh;
+    vertical-align: middle; }
 
-.hero__title {
-  position: absolute;
-  left: 100%;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1em;
-  font-weight: normal;
-  line-height: 1.2;
-  white-space: nowrap;
-}
-
-.hero__hello {
-  position: relative;
-  top: 0;
-  display: inline-block;
-  vertical-align: top;
-  overflow: hidden;
-  margin-left: 0.13em;
-  font-family: "Gravitas One", serif;
-  animation: hello-slide 0.38s 1.12s cubic-bezier(0.3, 1, 1, 1) both, hello-rise 0.12s 2.6s cubic-bezier(0.11, 0, 0.5, 0) both, fade-out 0.04s 2.68s linear both;
-}
-
-.hero__hello::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: -0.9em;
-  right: 0;
-  background: linear-gradient(to right, rgba(247, 242, 235, 0), #f7f2eb 0.9em);
-  animation: hello-wipe 0.63s 1.12s cubic-bezier(0.2, 0.8, 1, 1) both;
-}
-
-.hero__test {
-  position: absolute;
-  top: -0.05em;
-  left: 0.13em;
-  font-family: "Abril Fatface", serif;
-  font-size: 0.98em;
-  animation: test-rise 0.1s 2.72s cubic-bezier(0.5, 1, 0.89, 1) both, fade-in 0.1s 2.72s linear both;
-}
-
-.hero .nickname {
-  font-family: "IBM Plex Mono", monospace;
-}
+@keyframes fx-decoder {
+  0% {
+    content: "1#gY%&g?"; }
+  12% {
+    content: "I1#gY%&h"; }
+  24% {
+    content: "lI1#gY%!"; }
+  36% {
+    content: "[lI1#gY/"; }
+  48% {
+    content: "[vlI1#gJ"; }
+  60% {
+    content: "[vaII1#]"; }
+  72% {
+    content: "[vaieD1]"; }
+  84% {
+    content: "[vaiedD]"; }
+  96% {
+    content: "[vaiedy]"; } }
 
 @keyframes avatar-pop {
   from {
-    transform: scale(0.05);
-  }
+    transform: scale(0.05); }
   to {
-    transform: scale(1);
-  }
-}
+    transform: scale(1); } }
 
 @keyframes avatar-move {
   0%, 6.5% {
     transform: none;
-    animation-timing-function: cubic-bezier(1, 0.1, 0.15, 1.1);
-  }
+    animation-timing-function: cubic-bezier(1, 0.1, 0.15, 1.1); }
   16%, 26.4% {
     transform: translateX(-1.94em);
-    animation-timing-function: cubic-bezier(0.5, 0.8, 0.15, 1.25);
-  }
+    animation-timing-function: cubic-bezier(0.5, 0.8, 0.15, 1.25); }
   31.5%, 100% {
-    transform: translateX(-2.6175em);
-  }
-}
+    transform: translateX(-3.2695em); } }
 
 @keyframes hello-slide {
   from {
-    transform: translateX(-0.62em);
-  }
+    transform: translateX(-0.62em); }
   to {
-    transform: none;
-  }
-}
+    transform: none; } }
 
 @keyframes hello-wipe {
   from {
-    left: -0.9em;
-  }
+    left: -0.9em; }
   to {
-    left: 100%;
-  }
-}
+    left: 100%; } }
 
 @keyframes hello-rise {
   to {
-    top: -0.15em;
-  }
-}
+    top: -0.15em; } }
 
 @keyframes test-rise {
   from {
-    top: 0.14em;
-  }
+    top: 0.14em; }
   to {
-    top: -0.05em;
-  }
-}
+    top: -0.05em; } }
+
+@keyframes sub-rise {
+  from {
+    bottom: 1.61em; }
+  to {
+    bottom: 1.42em; } }
 
 @keyframes fade-out {
   to {
-    opacity: 0;
-  }
-}
+    opacity: 0; } }
 
 @keyframes fade-in {
   from {
-    opacity: 0;
-  }
+    opacity: 0; }
   to {
-    opacity: 1;
-  }
-}
+    opacity: 1; } }
 
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0s !important;
-    animation-delay: 0s !important;
-  }
-}
+    animation-delay: 0s !important; } }
